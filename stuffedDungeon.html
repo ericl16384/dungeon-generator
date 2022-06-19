@@ -764,29 +764,81 @@ var mapHeight = 32;
 var map = createTileSpace(mapWidth, mapHeight, "stone");
 
 
-var points = [];
-for(let i=0; i<10; i++) {
-    var x = randint(0, mapWidth);
-    var y = randint(0, mapHeight);
-    //var x = randint(1, mapWidth-1);
-    //var y = randint(1, mapHeight-1);
-    
-    points.push([x, y]);
+// add rooms
 
-    map[x][y] = "room";
-    //for(let j=x-1; j<=x+1; j++) {
-    //    for(let k=y-1; k<=y+1; k++) {
-    //        map[j][k] = "room";
-    //    }
-    //}
+function roomPlacementCheck(x, y, w, h) {
+    // pad the edges, to separate rooms
+    x -= 1;
+    y -= 1;
+    w += 2;
+    h += 2;
+
+    if(x < 0 || x+w >= mapWidth || y < 0 || y+h >= mapHeight) {
+        return false;
+    }
+
+    for(let i=x; i<x+w; i++) {
+        for(let j=y; j<y+h; j++) {
+            if(map[i][j] == "room") {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
-var [edges, triangles] = delaunayTriangulation(points);
+function attemptRoomPlacement(x, y, w, h) {
+    if(roomPlacementCheck(x, y, w, h)) {
+        for(let i=x; i<x+w; i++) {
+            for(let j=y; j<y+h; j++) {
+                map[i][j] = "room";
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+function addRooms(minW, maxW, minH, maxH, count, maxAttemptsEach=16) {
+    var rooms = [];
+    for(let i=0; i<count; i++) {
+        var w = randint(minW, maxW + 1);
+        var h = randint(minH, maxH + 1);
+
+        for(let j=0; j<maxAttemptsEach; j++) {
+            var x = randint(0, mapWidth - w);
+            var y = randint(0, mapHeight - h);
+            if(attemptRoomPlacement(x, y, w, h, true)) {
+                rooms.push([x, y, w, h]);
+                break;
+            }
+        }
+    }
+    return rooms;
+}
+
+var rooms = [];
+rooms.push(...addRooms(5, 8, 5, 8, 5));
+rooms.push(...addRooms(2, 4, 2, 4, 5));
+
+
+// triangulate rooms
+
+var delaunayPoints = [];
+for(let i=0; i<rooms.length; i++) {
+    delaunayPoints.push([
+        Math.floor(rooms[i][0] + rooms[i][2]/2),
+        Math.floor(rooms[i][1] + rooms[i][3]/2)
+    ]);
+}
+
+var [edges, triangles] = delaunayTriangulation(delaunayPoints);
+
+
+// here is where I would remove extraneous edges
 
 
 // create corridors
-
-// here is where I would remove extraneous edges
 
 var edgesArray = [];
 for(key in edges) {
