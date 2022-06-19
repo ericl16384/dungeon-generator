@@ -14,7 +14,7 @@ The first dungeon generator, which pathfinds every connection between rooms reco
 Configurable generator, to which I plan to add settings in the html for users. Not finished.
 
 ## TODO
-https://youtu.be/rBY2Dzej03A
+[2D algo description](https://youtu.be/rBY2Dzej03A)
  - [x] Place rooms
  - [x] Delaunay triangulation of room centers
    - Bowyer-Watson algorithm
