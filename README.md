@@ -10,5 +10,8 @@ I learned how to create a Delaunay triangulation, which took longer than it shou
 ### stuffedDungeon.html
 The first dungeon generator, which pathfinds every connection between rooms recorded on the Delaunay triangulation.
 
+### dungeonExplorer.html
+Configurable generator, to which I plan to add settings in the html for users. Not finished.
+
 ## TODO
 Reduce the number of connections, via creating a MST of the connections, but keep a few extra for variety. If the Delaunay triangulation works so well by itself, maybe I don't need this. I could reduce complexity by only creating an MST, but it might be hard to add the extra connections.
