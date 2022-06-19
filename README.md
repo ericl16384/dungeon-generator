@@ -26,4 +26,5 @@ https://youtu.be/rBY2Dzej03A
    - Cheaper to use existing hallways (20% cost?)
    - Existing rooms have increased cost (200%?)
    - Connect to doors, or to the nearest point on the edge?
+
 Reduce the number of connections, via creating a MST of the connections, but keep a few extra for variety. If the Delaunay triangulation works so well by itself, maybe I don't need this. I could reduce complexity by only creating an MST, but it might be hard to add the extra connections.
